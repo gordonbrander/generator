@@ -1,24 +1,24 @@
 import { assertEquals } from "@std/assert";
 import {
   dedupe,
-  filter,
-  filterMap,
-  flatMap,
-  flatten,
-  map,
-  reduce,
-  scan,
-  take,
-  takeWhile,
   dedupeAsync,
+  filter,
   filterAsync,
+  filterMap,
   filterMapAsync,
+  flatMap,
   flatMapAsync,
+  flatten,
   flattenAsync,
+  map,
   mapAsync,
+  reduce,
   reduceAsync,
+  scan,
   scanAsync,
+  take,
   takeAsync,
+  takeWhile,
   takeWhileAsync,
 } from "./generator.ts";
 
@@ -137,7 +137,7 @@ Deno.test("reduceAsync accumulates values asynchronously", async () => {
 Deno.test("scanAsync yields intermediate results asynchronously", async () => {
   const numbers = [1, 2, 3];
   const sums = await Array.fromAsync(
-    scanAsync(sleepyIter(numbers), async (acc, n) => acc + n, 0),
+    scanAsync(sleepyIter(numbers), (acc, n) => acc + n, 0),
   );
   assertEquals(sums, [0, 1, 3, 6]);
 });
