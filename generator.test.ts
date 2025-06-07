@@ -1,5 +1,7 @@
 import { assertEquals } from "@std/assert";
 import {
+  concat,
+  concatAsync,
   dedupe,
   dedupeAsync,
   filter,
@@ -45,6 +47,11 @@ Deno.test("scan yields intermediate results", () => {
   const numbers = [1, 2, 3];
   const sums = [...scan(numbers, (acc, n) => acc + n, 0)];
   assertEquals(sums, [0, 1, 3, 6]);
+});
+
+Deno.test("concat combines iterables", async () => {
+  const flat = await Array.from(concat([1, 2], [3, 4], [5]));
+  assertEquals(flat, [1, 2, 3, 4, 5]);
 });
 
 Deno.test("flatten combines nested iterables", () => {
@@ -141,6 +148,11 @@ Deno.test("scanAsync yields intermediate results asynchronously", async () => {
     scanAsync(sleepyIter(numbers), (acc, n) => acc + n, 0),
   );
   assertEquals(sums, [0, 1, 3, 6]);
+});
+
+Deno.test("concatAsync combines async iterables", async () => {
+  const flat = await Array.fromAsync(concatAsync([1, 2], [3, 4], [5]));
+  assertEquals(flat, [1, 2, 3, 4, 5]);
 });
 
 Deno.test("flattenAsync combines nested async iterables", async () => {

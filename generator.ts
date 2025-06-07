@@ -60,6 +60,17 @@ export function* scan<T, U>(
 }
 
 /**
+ * Concatenate multiple async or sync iterables
+ */
+export function* concat<T>(
+  ...iter: Iterable<T>[]
+): Generator<T, void, undefined> {
+  for (const inner of iter) {
+    yield* inner;
+  }
+}
+
+/**
  * Flattens an iterator of iterables into a single iterator
  */
 export function* flatten<T>(
@@ -204,6 +215,15 @@ export async function* scanAsync<T, U>(
   for await (const value of iter) {
     acc = await fn(acc, value);
     yield acc;
+  }
+}
+
+/** Concatenate multiple async or sync iterables */
+export async function* concatAsync<T>(
+  ...iterables: AwaitableIterable<T>[]
+): AsyncGenerator<T, void, undefined> {
+  for await (const iterable of iterables) {
+    yield* iterable;
   }
 }
 
