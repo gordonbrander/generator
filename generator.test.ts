@@ -20,6 +20,7 @@ import {
   takeAsync,
   takeWhile,
   takeWhileAsync,
+  toAsync,
 } from "./generator.ts";
 
 Deno.test("map transforms values", () => {
@@ -206,3 +207,11 @@ Deno.test(
     ]);
   },
 );
+
+Deno.test("toAsync converts sync iterable to async generator", async () => {
+  const numbers = [1, 2, 3, 4, 5];
+  const gen = toAsync(numbers);
+  assertEquals(typeof gen[Symbol.asyncIterator], "function");
+  const asyncNumbers = await Array.fromAsync(gen);
+  assertEquals(asyncNumbers, [1, 2, 3, 4, 5]);
+});

@@ -141,6 +141,13 @@ export type AwaitableIterable<T, TReturn = unknown, TNext = unknown> =
   | AsyncIterable<T, TReturn, TNext>
   | Iterable<T, TReturn, TNext>;
 
+/** Transform an iterable into an async generator */
+export async function* toAsync<T>(iter: Iterable<T>): AsyncGenerator<T> {
+  for await (const value of iter) {
+    yield value;
+  }
+}
+
 /**
  * Maps values asynchronously
  */
