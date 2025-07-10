@@ -8,6 +8,8 @@ import {
   filterAsync,
   filterMap,
   filterMapAsync,
+  first,
+  firstAsync,
   flatMap,
   flatMapAsync,
   flatten,
@@ -22,8 +24,6 @@ import {
   takeAsync,
   takeWhile,
   takeWhileAsync,
-  first,
-  firstAsync,
   toAsync,
 } from "./generator.ts";
 
