@@ -22,6 +22,8 @@ import {
   takeAsync,
   takeWhile,
   takeWhileAsync,
+  first,
+  firstAsync,
   toAsync,
 } from "./generator.ts";
 
@@ -107,16 +109,17 @@ Deno.test("dedupe removes duplicate values based on key", async () => {
   ]);
 });
 
-const sleep = <T>(value: T, ms: number): Promise<T> =>
+const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => {
     setTimeout(() => {
-      resolve(value);
+      resolve();
     }, ms);
   });
 
 async function* sleepyIter<T>(values: Iterable<T>): AsyncGenerator<T> {
+  await sleep(1);
   for (const n of values) {
-    yield await sleep(n, 1);
+    yield await n;
   }
 }
 
@@ -196,6 +199,33 @@ Deno.test(
     assertEquals(lessThanFour, [1, 2, 3]);
   },
 );
+
+Deno.test("first returns the first item from an iterable", () => {
+  const numbers = [1, 2, 3, 4, 5];
+  const firstItem = first(numbers);
+  assertEquals(firstItem, 1);
+});
+
+Deno.test("first returns undefined for empty iterable", () => {
+  const empty: number[] = [];
+  const firstItem = first(empty);
+  assertEquals(firstItem, undefined);
+});
+
+Deno.test(
+  "firstAsync returns the first item from an async iterable",
+  async () => {
+    const numbers = [1, 2, 3, 4, 5];
+    const firstItem = await firstAsync(sleepyIter(numbers));
+    assertEquals(firstItem, 1);
+  },
+);
+
+Deno.test("firstAsync returns undefined for empty async iterable", async () => {
+  const empty: number[] = [];
+  const firstItem = await firstAsync(sleepyIter(empty));
+  assertEquals(firstItem, undefined);
+});
 
 Deno.test(
   "dedupeAsync removes duplicate values based on key asynchronously",

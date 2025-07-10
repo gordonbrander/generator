@@ -133,6 +133,18 @@ export function* takeWhile<T>(
   }
 }
 
+/** Takes the first item from the iterator */
+export function first<T>(iter: Iterable<T>): T | undefined {
+  for (const value of iter) {
+    return value;
+  }
+}
+
+/**
+ * Deduplicates values using `getKey` to derive a string key representing the value
+ * @param iter - an iterable of values to deduplicate
+ * @param getKey - a function that returns a string key representing the value
+ */
 export function* dedupe<T>(
   iter: Iterable<T>,
   getKey: (value: T) => string,
@@ -290,6 +302,14 @@ export async function* takeWhileAsync<T>(
   for await (const value of iter) {
     if (!(await predicate(value))) break;
     yield value;
+  }
+}
+
+export async function firstAsync<T>(
+  iter: AwaitableIterable<T>,
+): Promise<T | undefined> {
+  for await (const value of iter) {
+    return value;
   }
 }
 
